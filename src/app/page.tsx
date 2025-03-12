@@ -1,103 +1,358 @@
-import Image from "next/image";
+'use client';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import ImageViewer from '@/components/ImageViewer';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [showAccordion, setShowAccordion] = useState(false);
+  const [openAccordions, setOpenAccordions] = useState<boolean[]>([]);
+  const [docId, setDocId] = useState("SF-2024-0001");
+  const [formCount, setFormCount] = useState(1);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Reset accordion states when form count changes
+  useEffect(() => {
+    setOpenAccordions(new Array(formCount).fill(false));
+  }, [formCount]);
+
+  const toggleAccordion = (index: number) => {
+    setOpenAccordions(prev => prev.map((state, i) => i === index ? !state : state));
+  };
+
+  const renderAccordion = (index: number) => (
+    <div key={index} className="w-full border-t border-gray-100">
+      <button
+        onClick={() => toggleAccordion(index)}
+        className="w-full mt-8 p-6 flex items-center justify-between text-[#111827] font-medium bg-white rounded-2xl shadow-sm hover:shadow-md hover:bg-gray-50/80 transition-all duration-200 group"
+      >
+        <div className="flex items-center gap-3">
+          <div className={`w-2 h-2 rounded-full bg-[#111827] transition-all duration-200 ${openAccordions[index] ? 'scale-150' : ''}`} />
+          <span className="text-lg group-hover:text-[#111827] transition-colors">
+            {docId} Form: {Math.floor(index / 2) + 1} Page: {(index % 2) + 1} Signature: {index + 1}
+          </span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <svg
+          className={`w-6 h-6 transform transition-transform duration-200 group-hover:text-[#111827] ${openAccordions[index] ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openAccordions[index] ? 'max-h-[2400px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="bg-gray-50 rounded-xl p-10 space-y-16 mt-8">
+          {/* Form Review Section */}
+          <div className="p-10 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <h3 className="text-[#111827] text-2xl font-bold mb-8">Form Validation Overview</h3>
+            
+            <div className="flex gap-12">
+              {/* Image Section - Left Side */}
+              <div className="w-2/5 shrink-0">
+                <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-lg">
+                  <ImageViewer
+                    src="/coffee.jpg"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+
+              {/* Table Section - Right Side */}
+              <div className="flex-1">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b-2 border-gray-200">
+                        <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">Form Fields</th>
+                          <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">System Results</th>
+                          <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">Disagree</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[1, 2, 3, 4].map((item) => (
+                        <tr key={item} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                          <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Field {item}</td>
+                          <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Result {item}</td>
+                          <td className="py-5 px-4 text-center">
+                            <input 
+                              type="checkbox" 
+                              className="w-5 h-5 rounded border-gray-300 text-[#111827] focus:ring-[#111827] cursor-pointer"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                      <tr className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Field 5</td>
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Result 5</td>
+                        <td className="py-5 px-4 text-center">
+                          <div className="space-y-2">
+                            <p className="text-xs text-gray-500">Disagree with evaluation
+
+</p>
+                            <select 
+                              className="w-full py-2.5 px-3 text-base border-gray-200 rounded-lg focus:border-[#111827] focus:ring-[#111827] cursor-pointer bg-white shadow-sm text-gray-700"
+                            >
+                              <option value="" className="text-gray-700">Select</option>
+                              <option value="yes">Yes</option>
+                              <option value="no">No</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={3} className="py-6 text-center">
+                          <label className="inline-flex items-center gap-3 cursor-pointer group">
+                            <input 
+                              type="checkbox" 
+                              className="w-5 h-5 rounded border-gray-300 text-[#111827] focus:ring-[#111827]"
+                              onChange={(e) => {
+                                const label = e.target.nextSibling;
+                                if (label) {
+                                  label.textContent = e.target.checked ? 'This form is NOT human legible' : 'This form is human legible';
+                                }
+                              }}
+                            />
+                            <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">This form is human legible</span>
+                          </label>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Signature Validation */}
+          <div className="p-10 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <h3 className="text-[#111827] text-2xl font-bold mb-8">Signature Validation</h3>
+            
+            <div className="flex gap-12">
+              {/* Signature Validation */}
+              <div className="w-2/5 shrink-0">
+                <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-lg">
+                  <ImageViewer
+                    src="/coffee.jpg"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+
+              <div className="flex-1 pt-2">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b-2 border-gray-200">
+                        <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">Form Fields</th>
+                          <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">System Results</th>
+                          <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">Disagree</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Signature Field 1</td>
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Signature Result 1</td>
+                        <td className="py-5 px-4 text-center">
+                          <input 
+                            type="checkbox" 
+                            className="w-5 h-5 rounded border-gray-300 text-[#111827] focus:ring-[#111827] cursor-pointer"
+                          />
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Signature Field 2</td>
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Signature Result 2</td>
+                        <td className="py-5 px-4 text-center">
+                          <div className="space-y-2">
+                            <p className="text-xs text-gray-500">Disagree with evaluation
+
+</p>
+                            <select 
+                              className="w-full py-2.5 px-3 text-base border-gray-200 rounded-lg focus:border-[#111827] focus:ring-[#111827] cursor-pointer bg-white shadow-sm text-gray-700"
+                            >
+                              <option value="" className="text-gray-700">Select</option>
+                              <option value="yes">Yes</option>
+                              <option value="no">No</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Additional Info 1</td>
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Additional Info 2</td>
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Additional Info 3</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Printed Name */}
+          <div className="p-10 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+            <h3 className="text-[#111827] text-2xl font-bold mb-8">Printed Name</h3>
+            
+            <div className="flex gap-12">
+              {/* Printed Name */}
+              <div className="w-2/5 shrink-0">
+                <div className="relative aspect-[4/5] rounded-xl overflow-hidden shadow-lg">
+                  <ImageViewer
+                    src="/coffee.jpg"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+
+              <div className="flex-1 pt-2">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b-2 border-gray-200">
+                        <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">Form Fields</th>
+                        <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">System Results</th>
+                        <th className="text-center py-4 px-4 text-sm font-bold text-[#111827] w-1/3">Disagree</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Name Field 1</td>
+                        <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Name Result 1</td>
+                        <td className="py-5 px-4 text-center">
+                          <input 
+                            type="checkbox" 
+                            className="w-5 h-5 rounded border-gray-300 text-[#111827] focus:ring-[#111827] cursor-pointer"
+                          />
+                        </td>
+                      </tr>
+                      {[2, 3, 4, 5].map((item) => (
+                        <tr key={item} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors">
+                          <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center">Name Field {item}</td>
+                          <td className="py-5 px-4 text-sm font-medium text-gray-700 text-center italic">Coming soon</td>
+                          <td className="py-5 px-4 text-center">
+                            {/* <input 
+                              type="checkbox" 
+                              className="w-5 h-5 rounded border-gray-300 text-[#111827] focus:ring-[#111827] cursor-pointer"
+                            /> */}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  );
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Header */}
+      <header className="w-full bg-[#111827]/10 backdrop-blur-lg border-b border-[#111827]/5 p-6 flex justify-between items-center fixed top-0 z-20">
+        <div className="flex items-center gap-5">
+          {/* Company Logo Placeholder */}
+          <div className="w-9 h-9 bg-[#111827] rounded-xl flex items-center justify-center text-white text-sm font-medium shadow-lg shadow-gray-200">
+            SF
+          </div>
+          {/* Company Title */}
+          <h1 className="text-lg font-medium text-[#111827] tracking-tight">State Farm</h1>
+        </div>
+        
+        {/* Avatar Placeholder */}
+        <div className="w-9 h-9 relative rounded-full ring-4 ring-white shadow-md overflow-hidden">
+          <Image
+            src="/coffee.jpg"
+            alt="Profile"
+            fill
+            className="object-cover"
+          />
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 pt-32 pb-32">
+        <div className="flex flex-col items-center bg-white rounded-2xl p-8 shadow-xl shadow-gray-100/50">
+          {/* Input Label */}
+          <label className="text-sm text-[#111827]/80 mb-3 self-start font-medium">
+            Enter the iSEIT Key or document ID to get started.
+          </label>
+          
+          {/* Input Group */}
+          <div className="flex w-full gap-3 items-center">
+            {/* Input with Tooltip */}
+            <div className="relative flex-1">
+              <input
+                type="text"
+                placeholder="iSEIT Key or Doc ID *"
+                value={docId}
+                onChange={(e) => setDocId(e.target.value)}
+                className="w-full px-4 py-3 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#111827]/20 focus:border-[#111827] placeholder-gray-400 text-gray-900 font-medium transition-all duration-200"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 group">
+                <button 
+                  className="text-gray-400 hover:text-[#111827] w-5 h-5 flex items-center justify-center transition-colors duration-200"
+                >
+                  ?
+                </button>
+                <div className="absolute right-0 top-8 w-48 p-3 bg-[#111827] text-white/90 text-xs rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl shadow-gray-900/10">
+                  This is a helpful tooltip explaining what the key is for
+                </div>
+              </div>
+            </div>
+
+            {/* Form Count Selector */}
+            <div className="w-40">
+              <select
+                value={formCount}
+                onChange={(e) => setFormCount(Number(e.target.value))}
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#111827]/20 focus:border-[#111827] text-gray-900 font-medium bg-white cursor-pointer transition-all duration-200"
+              >
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <option key={num} value={num}>
+                    {num} Form{num > 1 ? 's' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            {/* Enter Button */}
+            <button 
+              onClick={() => !showAccordion && setShowAccordion(true)}
+              className="px-8 py-3 bg-[#111827] text-white rounded-xl hover:shadow-lg hover:shadow-gray-200 transition-all duration-200 font-medium text-sm"
+            >
+              Enter
+            </button>
+          </div>
+
+          {/* Accordion Sections */}
+          {showAccordion && (
+            <div className="w-full space-y-8 mt-8">
+              {/* Results Heading */}
+              <div className="w-full text-center">
+                <h2 className="text-3xl font-bold text-[#111827] mb-8">Results</h2>
+              </div>
+
+              {/* Dynamic Accordions */}
+              {Array.from({ length: formCount }, (_, i) => renderAccordion(i))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full py-6 border-t border-[#111827]/5 bg-[#111827]/10 backdrop-blur-lg fixed bottom-0 z-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center">
+            <p className="font-bold text-[#111827] mb-2">Notice</p>
+            <p className="text-sm text-gray-600">All form data is securely processed and validated in real-time.</p>
+          </div>
+        </div>
+      </footer>
+
+      {/* Add padding bottom to account for fixed footer */}
+      <div className="pb-28"></div>
+    </main>
   );
 }
