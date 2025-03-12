@@ -22,11 +22,11 @@ export default function Home() {
     <div key={index} className="w-full border-t border-gray-100">
       <button
         onClick={() => toggleAccordion(index)}
-        className="w-full mt-8 p-6 flex items-center justify-between text-[#111827] font-medium bg-white rounded-2xl shadow-sm hover:shadow-md hover:bg-gray-50/80 transition-all duration-200 group"
+        className={`w-full mt-8 p-6 flex items-center justify-between text-[#111827] font-medium bg-white rounded-2xl shadow-sm hover:shadow-md hover:bg-gray-50/80 transition-all duration-500 group hover:scale-[1.01] ${openAccordions[index] ? 'shadow-lg ring-1 ring-gray-100' : ''}`}
       >
         <div className="flex items-center gap-3">
-          <div className={`w-2 h-2 rounded-full bg-[#111827] transition-all duration-200 ${openAccordions[index] ? 'scale-150' : ''}`} />
-          <span className="text-lg group-hover:text-[#111827] transition-colors">
+          <div className={`w-2 h-2 rounded-full bg-[#111827] transition-all duration-500 ${openAccordions[index] ? 'scale-150 animate-pulse' : ''}`} />
+          <span className={`text-lg group-hover:text-[#111827] transition-all duration-300 ${openAccordions[index] ? 'font-semibold scale-[1.02]' : ''}`}>
             {docId} Form: {Math.floor(index / 2) + 1} Page: {(index % 2) + 1} Signature: {index + 1}
           </span>
         </div>
@@ -39,11 +39,11 @@ export default function Home() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${openAccordions[index] ? 'max-h-[2400px] opacity-100' : 'max-h-0 opacity-0'}`}>
-        <div className="bg-gray-50 rounded-xl p-10 space-y-16 mt-8">
+      <div className={`overflow-hidden transition-all duration-700 ease-in-out ${openAccordions[index] ? 'max-h-[2400px] opacity-100 transform-gpu' : 'max-h-0 opacity-0'}`}>
+        <div className="bg-gray-50 rounded-xl p-10 space-y-16 mt-8 transform-gpu transition-all duration-500 hover:shadow-xl">
           {/* Form Review Section */}
-          <div className="p-10 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
-            <h3 className="text-[#111827] text-2xl font-bold mb-8">Form Validation Overview</h3>
+          <div className="p-10 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-500 hover:scale-[1.01] group">
+            <h3 className="text-[#111827] text-2xl font-bold mb-8 group-hover:translate-x-1 transition-transform duration-300">Form Validation Overview</h3>
             
             <div className="flex gap-12">
               {/* Image Section - Left Side */}
@@ -288,15 +288,15 @@ export default function Home() {
                 placeholder="iSEIT Key or Doc ID *"
                 value={docId}
                 onChange={(e) => setDocId(e.target.value)}
-                className="w-full px-4 py-3 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#111827]/20 focus:border-[#111827] placeholder-gray-400 text-gray-900 font-medium transition-all duration-200"
+                className="w-full px-4 py-3 pr-10 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#111827]/20 focus:border-[#111827] placeholder-gray-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-inner"
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2 group">
                 <button 
-                  className="text-gray-400 hover:text-[#111827] w-5 h-5 flex items-center justify-center transition-colors duration-200"
+                  className="text-gray-400 hover:text-[#111827] w-5 h-5 flex items-center justify-center transition-all duration-300 hover:rotate-12"
                 >
                   ?
                 </button>
-                <div className="absolute right-0 top-8 w-48 p-3 bg-[#111827] text-white/90 text-xs rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl shadow-gray-900/10">
+                <div className="absolute right-0 top-8 w-48 p-3 bg-[#111827] text-white/90 text-xs rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10 shadow-xl shadow-gray-900/10 transform-gpu group-hover:translate-y-0 translate-y-2">
                   This is a helpful tooltip explaining what the key is for
                 </div>
               </div>
@@ -320,18 +320,19 @@ export default function Home() {
             {/* Enter Button */}
             <button 
               onClick={() => !showAccordion && setShowAccordion(true)}
-              className="px-8 py-3 bg-[#111827] text-white rounded-xl hover:shadow-lg hover:shadow-gray-200 transition-all duration-200 font-medium text-sm"
+              className="px-8 py-3 bg-[#111827] text-white rounded-xl hover:shadow-lg hover:shadow-gray-200 transition-all duration-300 font-medium text-sm relative overflow-hidden group hover:scale-105 active:scale-95"
             >
-              Enter
+              <span className="relative z-10">Enter</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-gray-900 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </button>
           </div>
 
           {/* Accordion Sections */}
           {showAccordion && (
-            <div className="w-full space-y-8 mt-8">
+            <div className="w-full space-y-8 mt-8 animate-fadeIn">
               {/* Results Heading */}
-              <div className="w-full text-center">
-                <h2 className="text-3xl font-bold text-[#111827] mb-8">Results</h2>
+              <div className="w-full text-center animate-slideDown">
+                <h2 className="text-3xl font-bold text-[#111827] mb-8 hover:scale-105 transition-transform duration-300">Results</h2>
               </div>
 
               {/* Dynamic Accordions */}
