@@ -8,7 +8,7 @@ interface ImageViewerProps {
 }
 
 export default function ImageViewer({ src, className = '' }: ImageViewerProps) {
-  const viewerRef = useRef<any>(null);
+  const viewerRef = useRef<import('openseadragon').Viewer | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

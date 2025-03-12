@@ -1,5 +1,5 @@
 declare module 'openseadragon' {
-  interface Options {
+  export interface Options {
     element: HTMLElement;
     tileSources: {
       type: string;
@@ -36,17 +36,14 @@ declare module 'openseadragon' {
     rotateRightButton?: string;
   }
 
-  interface Viewer {
+  export interface Viewer {
     destroy(): void;
   }
 
-  interface OpenSeadragonStatic {
+  export interface OpenSeadragonStatic {
     (options: Options): Viewer;
     ControlAnchor: {
       TOP_RIGHT: number;
-      TOP_LEFT: number;
-      BOTTOM_LEFT: number;
-      BOTTOM_RIGHT: number;
     };
   }
 
